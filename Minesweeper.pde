@@ -1,44 +1,36 @@
 import de.bezier.guido.*;
-public static final int NUM_ROWS = 17;
-public static final int NUM_COLS = 17;
-public static final int NUM_BOMBS = 45;
-private MSButton[][] buttons; //2d array of minesweeper buttons
-private ArrayList <MSButton> bombs = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
-
+public static final int rows = 20;
+public static final int cols = 20;
+public static final int Bombs = 50;
+private MSButton[][] buttons; 
+private ArrayList <MSButton> bombs = new ArrayList <MSButton>(); 
 void setup ()
 {
     size(400, 400);
     textAlign(CENTER,CENTER);
-    
-    // make the manager
     Interactive.make( this );
-    
-    
-    buttons = new MSButton[NUM_ROWS][NUM_COLS];
-    for(int i = 0; i<NUM_ROWS; i++)
+    buttons = new MSButton[rows][cols];
+    for(int i = 0; i<rows; i++)
     {
-        for(int j = 0; j<NUM_COLS; j++)
+        for(int j = 0; j<cols; j++)
         {
             buttons[i][j] = new MSButton(i,j);
         }
     }
-    //declare and initialize buttons
-
     setBombs();
 }
 public void setBombs()
 {
-    while(bombs.size()<NUM_BOMBS)
+    while(bombs.size()<Bombs)
     {
-        int r = (int)(Math.random()*NUM_ROWS);
-        int c = (int)(Math.random()*NUM_COLS);
+        int r = (int)(Math.random()*rows);
+        int c = (int)(Math.random()*cols);
         if(!bombs.contains(buttons[r][c]))
         {
             bombs.add(buttons[r][c]);
         }
     }
 }
-
 public void draw ()
 {
     background( 0 );
@@ -49,7 +41,7 @@ public void draw ()
 }
 public boolean isWon()
 {
-     int markCount = 0;
+    int markCount = 0;
     for(int i = 0; i<bombs.size();i++)
     {
         if(bombs.get(i).isMarked())
@@ -71,7 +63,6 @@ public boolean gameOver()
         {
             return true;
         }
-    
     }
     return false;
 }
@@ -94,28 +85,25 @@ public void displayWinningMessage()
     buttons[10][10].setLabel("");
     buttons[10][11].setLabel("W");
     buttons[10][12].setLabel("I");
-    buttons[10][13].setLabel("N");
-    
+    buttons[10][13].setLabel("N");   
 }
-
 public class MSButton
 {
     private int r, c;
     private float x,y, width, height;
     private boolean clicked, marked;
     private String label;
-    
     public MSButton ( int rr, int cc )
     {
-        width = 400/NUM_COLS;
-        height = 400/NUM_ROWS;
+        width = 400/cols;
+        height = 400/rows;
         r = rr;
         c = cc; 
         x = c*width;
         y = r*height;
         label = "";
         marked = clicked = false;
-        Interactive.add( this ); // register it with the manager
+        Interactive.add( this ); 
     }
     public boolean isMarked()
     {
@@ -125,8 +113,6 @@ public class MSButton
     {
         return clicked;
     }
-    // called by manager
-    
     public void mousePressed () 
     {
         if(mouseButton == LEFT)
@@ -163,9 +149,7 @@ public class MSButton
              if(isValid(r,c+1) && !buttons[r][c+1].clicked)
                 buttons[r][c+1].mousePressed();
          }
-        //your code here
     }
-
     public void draw () 
     {    
         if (marked)
@@ -176,10 +160,9 @@ public class MSButton
             fill( 200 );
         else 
             fill( 100 );
-
-        rect(x, y, width, height);
-        fill(0);
-        text(label,x+width/2,y+height/2);
+            rect(x, y, width, height);
+            fill(0);
+            text(label,x+width/2,y+height/2);
     }
     public void setLabel(String newLabel)
     {
@@ -187,7 +170,7 @@ public class MSButton
     }
     public boolean isValid(int r, int c)
     {
-       return r>=0 && r<NUM_ROWS && c>=0 && c<NUM_COLS;
+       return r>=0 && r<rows && c>=0 && c<cols;
     }
     public int countBombs(int row, int col)
     {
@@ -227,14 +210,13 @@ public class MSButton
         return numBombs;
     }
 }
-
 public void keyPressed()
 {
     if(keyCode == 32)
     {
-        for(int i = 0; i<NUM_ROWS; i++)
+        for(int i = 0; i<rows; i++)
         {
-            for(int j = 0; j<NUM_COLS; j++)
+            for(int j = 0; j<cols; j++)
             {
                 bombs.remove(buttons[i][j]);
                 buttons[i][j].marked = false;
@@ -242,8 +224,6 @@ public void keyPressed()
                 buttons[i][j].setLabel(" ");
             }
         }
-    
-
     setBombs();
     }
 }
